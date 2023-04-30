@@ -37,11 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tasksData = Provider.of<Tasks>(context, listen: false);
-    final categoryData = Provider.of<CategoryLists>(context, listen: false);
+    final tasksData = Provider.of<Tasks>(context);
+    final categoryData = Provider.of<CategoryLists>(context);
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    bool confirmDelete = false;
     bool needTrailingColor = true;
+
+    void triggerBuild() {
+      setState(() {});
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -85,10 +91,57 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: screenHeight / 2.3,
               child: ListView.builder(
-                itemCount: tasksData.tasks.length,
-                itemBuilder: (ctx, i) => TaskItem(
-                    tasksData.tasks[i], needTrailingColor, Colors.white),
-              ),
+                  itemCount: tasksData.tasks.length,
+                  itemBuilder: (ctx, i) {
+                    return Dismissible(
+                      key: ValueKey(tasksData.tasks[i].id),
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        color: tasksData.tasks[i].color,
+                        padding: const EdgeInsets.only(right: 20),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 4,
+                        ),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      onDismissed: (_) {
+                        // setState(() {});
+                        tasksData.deleteTask(tasksData.tasks[i].id);
+                        categoryData.deleteTaskFromCategory(
+                            tasksData.tasks[i].id, tasksData.tasks[i].category);
+                        // setState(() {});
+                      },
+                      confirmDismiss: (_) {
+                        return showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                                  title: const Text('Confirm to delete task'),
+                                  content: const Text(
+                                      'Do you want to remove the task ?'),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop(false);
+                                        },
+                                        child: const Text(
+                                          'No',
+                                          style: TextStyle(color: Colors.black),
+                                        )),
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop(true);
+                                        },
+                                        child: const Text('Yes',
+                                            style: TextStyle(
+                                                color: Colors.black))),
+                                  ],
+                                ));
+                      },
+                      child: TaskItem(
+                          tasksData.tasks[i], needTrailingColor, Colors.white),
+                    );
+                  }),
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
             Container(

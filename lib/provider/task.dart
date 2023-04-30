@@ -73,6 +73,7 @@ class Tasks with ChangeNotifier {
     await db.insertTask(newTask);
     _tasks.insert(0, newTask);
     notifyListeners();
+    print(_tasks.length);
     return _tasks[0];
   }
 
@@ -95,10 +96,22 @@ class Tasks with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteCategoryTasks(String category) async {
+    final db = DatabaseHelper();
+    for (int i = 0; i < _tasks.length; i++) {
+      if (_tasks[i].category == category) {
+        await db.deleteTask(_tasks[i].id);
+      }
+    }
+    _tasks = await db.getTask();
+    notifyListeners();
+  }
+
   Future<void> deleteTask(String id) async {
     final db = DatabaseHelper();
     await db.deleteTask(id);
     final index = _tasks.indexWhere((element) => element.id == id);
     _tasks.removeAt(index);
+    notifyListeners();
   }
 }

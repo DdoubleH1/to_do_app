@@ -109,6 +109,19 @@ class CategoryLists with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteTaskFromCategory(
+      String taskId, String categoryTaskTitle) async {
+    final foundCategoryIndex =
+        _categoryList.indexWhere((cat) => cat.title == categoryTaskTitle);
+    _categoryList[foundCategoryIndex]
+        .categoryTasks
+        .removeWhere((task) => task.id == taskId);
+    final db = DatabaseHelper();
+    await db.updateCategory(_categoryList[foundCategoryIndex].id,
+        _categoryList[foundCategoryIndex]);
+    notifyListeners();
+  }
+
   Future<void> updateCategory(
       int? id, String title, List<Task> categoryTasks, Color newColor) async {
     final index = _categoryList.indexWhere((element) => element.id == id);

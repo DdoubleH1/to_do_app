@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/category.dart';
+import '../provider/task.dart';
 
 class CategoryItem extends StatefulWidget {
   // const CategoryItem({super.key});
@@ -16,6 +17,8 @@ class CategoryItem extends StatefulWidget {
 class _CategoryItemState extends State<CategoryItem> {
   @override
   Widget build(BuildContext context) {
+    final tasksData = Provider.of<Tasks>(context);
+    final categoryData = Provider.of<CategoryLists>(context);
     Color kColor = widget.item.color.computeLuminance() > 0.5
         ? Colors.black
         : Colors.white;
@@ -23,14 +26,18 @@ class _CategoryItemState extends State<CategoryItem> {
       direction: DismissDirection.endToStart,
       key: ValueKey(widget.item.id),
       background: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: widget.item.color,
+        alignment: Alignment.centerRight,
+        color: widget.item.color,
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
         ),
+        child: const Icon(Icons.delete, color: Colors.white),
       ),
-      onDismissed: (direction) {
-        Provider.of<CategoryLists>(context, listen: false)
-            .deleteCategory(widget.item.id);
+      onDismissed: (direction) async {
+        await categoryData.deleteCategory(widget.item.id);
+        await tasksData.deleteCategoryTasks(widget.item.title);
       },
       child: Container(
         decoration: BoxDecoration(
