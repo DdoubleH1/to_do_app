@@ -9,8 +9,8 @@
 ## Overview
 
 ### Home screen
-<body>
-<img src="[https://i.ibb.co/R40f0Cv/Screenshot-2023-04-25-204340.png](https://user-images.githubusercontent.com/94919981/236365208-2ca074aa-8e43-4a8e-a114-431222aee95b.png)" alt="" border="0" width="300" >
+
+<img src="https://user-images.githubusercontent.com/94919981/236366172-6e366f40-0ceb-4b3c-a8fa-b2d9d2991f6a.png" alt="" border="0" width="300" >
 </body>
 
 ### Add Category Screen
@@ -25,9 +25,7 @@
 
 ### Category Detail Screen
 <body>
-<img src="https://user-images.githubusercontent.com/94919981/236365591-f4a5c71a-45b6-4115-aa30-8eabd9cf09a9.mp4"
-
- alt="" border="0" width="300" >
+<img src="https://user-images.githubusercontent.com/94919981/236365591-f4a5c71a-45b6-4115-aa30-8eabd9cf09a9.mp4" alt="" border="0" width="300" >
 </body>
 
 ### Edit Category screen
